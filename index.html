@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro de Apuestas</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #2c3e50, #4ca1af);
+      margin: 0;
+      padding: 1rem;
+      color: #333;
+    }
+    h1 {
+      text-align: center;
+      color: white;
+      margin-bottom: 1rem;
+    }
+    form {
+      background-color: white;
+      padding: 1.5rem;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      margin-bottom: 2rem;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+    label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+    input, select {
+      width: 100%;
+      padding: 0.5rem;
+      margin-top: 0.25rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+    input[type="checkbox"] {
+      width: auto;
+      margin-right: 0.5rem;
+    }
+    button {
+      margin-top: 1.5rem;
+      padding: 0.75rem;
+      width: 100%;
+      background: linear-gradient(to right, #28a745, #218838);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: linear-gradient(to right, #218838, #1e7e34);
+    }
+    .stats {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      animation: fadeIn 0.5s ease-in-out;
+    }
+    .stats h2 {
+      margin-top: 0;
+      color: #2c3e50;
+    }
+    .stats p {
+      font-size: 1.1rem;
+      margin: 0.5rem 0;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <h1>📊 Registro de Apuestas</h1>
+  <form id="betForm">
+    <label>Fecha
+      <input type="date" id="fecha" required>
+    </label>
+    <label>Nombre de la apuesta
+      <input type="text" id="nombre" required>
+    </label>
+    <label>Cuota
+      <input type="number" step="0.01" id="cuota" required>
+    </label>
+    <label>Cantidad apostada (€)
+      <input type="number" step="0.01" id="cantidad" required>
+    </label>
+    <label>Deporte
+      <input type="text" id="deporte" required>
+    </label>
+    <label>
+      <input type="checkbox" id="super"> Súper aumento
+    </label>
+    <label>Resultado
+      <select id="resultado">
+        <option value="acertada">✅ Acertada</option>
+        <option value="fallada">❌ Fallada</option>
+      </select>
+    </label>
+    <button type="submit">Registrar apuesta</button>
+  </form>
+
+  <div class="stats">
+    <h2>Resumen</h2>
+    <p>Aciertos: <span id="aciertos">0</span></p>
+    <p>Fallos: <span id="fallos">0</span></p>
+    <p>Profit total: <span id="profit">0.00</span> €</p>
+  </div>
+
+  <script>
+    let aciertos = 0;
+    let fallos = 0;
+    let profit = 0;
+
+    document.getElementById('betForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const cuota = parseFloat(document.getElementById('cuota').value);
+      const cantidad = parseFloat(document.getElementById('cantidad').value);
+      const resultado = document.getElementById('resultado').value;
+
+      if (resultado === 'acertada') {
+        aciertos++;
+        profit += (cuota * cantidad) - cantidad;
+      } else {
+        fallos++;
+        profit -= cantidad;
+      }
+
+      document.getElementById('aciertos').textContent = aciertos;
+      document.getElementById('fallos').textContent = fallos;
+      document.getElementById('profit').textContent = profit.toFixed(2);
+
+      document.getElementById('betForm').reset();
+    });
+  </script>
+</body>
+</html>
